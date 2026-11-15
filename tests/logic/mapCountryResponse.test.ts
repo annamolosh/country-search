@@ -43,4 +43,20 @@ describe('mapCountryResponse', () => {
 
         expect(result.capital).toBe('Warsaw');
     });
+    it('should return country region', () => {
+        const rawCountry = {
+            name: {
+                common: 'Poland'
+            },
+            flags: {
+                png: 'https://example.com/poland.png'
+            },
+            capital: ['Warsaw'],
+            region: 'Europe'
+        };
+
+        const result = mapCountryResponse(rawCountry);
+
+        expect(result.region).toBe('Europe');
+    });
 });
