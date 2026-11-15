@@ -76,4 +76,25 @@ describe('mapCountryResponse', () => {
 
         expect(result.population).toBe(37600000);
     });
+    it('should return country languages', () => {
+        const rawCountry = {
+            name: {
+                common: 'Poland'
+            },
+            flags: {
+                png: 'https://example.com/poland.png'
+            },
+            capital: ['Warsaw'],
+            region: 'Europe',
+            population: 37600000,
+            languages: {
+                pol: 'Polish',
+                eng: 'English'
+            }
+        };
+
+        const result = mapCountryResponse(rawCountry);
+
+        expect(result.languages).toEqual(['Polish', 'English']);
+    });
 });
