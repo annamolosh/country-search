@@ -33,7 +33,7 @@ describe('searchCountries', () => {
         // Проверяем вызов fetch
         expect(mockFetch).toHaveBeenCalledWith(
             'https://countries.dev/name/poland',
-            { signal }
+            { signal: expect.any(AbortSignal) }
         );
 
         // Проверяем полученные данные
@@ -72,5 +72,52 @@ describe('searchCountries', () => {
         await expect(searchCountries('poland', signal)).rejects.toMatchObject({status: 500});
     });
 
+    it('should throw TimeoutError when request takes too long', async () => {
+        const mockFetch = vi.fn();
+
+        vi.stubGlobal('fetch', mockFetch);
+
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        mockFetch.mockImplementation((_url, { signal }) => {
+            return new Promise((_, reject) => {
+                signal.addEventListener('abort', () => {
+                    reject(signal.reason);
+                });
+            });
+        });
+
+        await expect(
+            searchCountries('poland', signal)
+        ).rejects.toMatchObject({
+            name: 'TimeoutError'
+        });
+    }, 7000);
+
+    it('should throw AbortError when request is aborted', async () => {
+        const mockFetch = vi.fn();
+
+        vi.stubGlobal('fetch', mockFetch);
+
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        mockFetch.mockImplementation((_url, { signal }) => {
+            return new Promise((_, reject) => {
+                signal.addEventListener('abort', () => {
+                    reject(signal.reason);
+                });
+            });
+        });
+
+        const request = searchCountries('poland', signal);
+
+        controller.abort();
+
+        await expect(request).rejects.toMatchObject({
+            name: 'AbortError'
+        });
+    });
 
 });
