@@ -3,6 +3,7 @@ export function mapCountryResponse(rawCountry: any) {
         name: rawCountry.name.common,
         flag: rawCountry.flags?.png ?? '',
         capital: rawCountry.capital?.[0] ?? '',
-        region: rawCountry.region ?? ''
+        region: rawCountry.region ?? '',
+        population: rawCountry.population
     };
 }
