@@ -1,3 +1,4 @@
+import { debounce } from '../../src/logic/debounce.js'
 import { describe, it , expect, vi} from 'vitest';
 
 describe('debounce', ()=> {
@@ -16,7 +17,7 @@ describe('debounce', ()=> {
         const debouncedCallBack = debounce(callback,500);
         debouncedCallBack()
 
-        vi.advanceTimersByTime(501)
+        vi.advanceTimersByTime(500)
         expect(callback).toHaveBeenCalledTimes(1)
         vi.useRealTimers()
     })
@@ -32,7 +33,7 @@ describe('debounce', ()=> {
         vi.advanceTimersByTime(300);
         expect(callback).not.toHaveBeenCalled();
 
-        vi.advanceTimersByTime(201);
+        vi.advanceTimersByTime(200);
         expect(callback).toHaveBeenCalledTimes(1);
 
         vi.useRealTimers()
