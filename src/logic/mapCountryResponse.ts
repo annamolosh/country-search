@@ -4,6 +4,7 @@ export function mapCountryResponse(rawCountry: any) {
         flag: rawCountry.flags?.png ?? '',
         capital: rawCountry.capital?.[0] ?? '',
         region: rawCountry.region ?? '',
-        population: rawCountry.population
+        population: rawCountry.population,
+        languages: Object.values(rawCountry.languages ?? {})
     };
 }
